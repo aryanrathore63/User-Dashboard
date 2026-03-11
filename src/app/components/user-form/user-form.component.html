@@ -1,0 +1,64 @@
+<form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="user-form">
+  <div class="form-group">
+    <label for="name">Name</label>
+    <input
+      type="text"
+      id="name"
+      formControlName="name"
+      placeholder="Enter full name"
+      [class.error]="isFieldInvalid('name')"
+    />
+    <div class="error-message" *ngIf="isFieldInvalid('name')">
+      {{ getErrorMessage('name') }}
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="email">Email</label>
+    <input
+      type="email"
+      id="email"
+      formControlName="email"
+      placeholder="Enter email address"
+      [class.error]="isFieldInvalid('email')"
+    />
+    <div class="error-message" *ngIf="isFieldInvalid('email')">
+      {{ getErrorMessage('email') }}
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="role">Role</label>
+    <select
+      id="role"
+      formControlName="role"
+      [class.error]="isFieldInvalid('role')"
+    >
+      <option value="Admin">Admin</option>
+      <option value="Editor">Editor</option>
+      <option value="Viewer">Viewer</option>
+    </select>
+    <div class="error-message" *ngIf="isFieldInvalid('role')">
+      {{ getErrorMessage('role') }}
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <button
+      type="button"
+      class="btn btn-cancel"
+      (click)="onCancel()"
+      [disabled]="isSubmitting"
+    >
+      Cancel
+    </button>
+    <button
+      type="submit"
+      class="btn btn-submit"
+      [disabled]="userForm.invalid || isSubmitting"
+    >
+      <span *ngIf="!isSubmitting">Save User</span>
+      <span *ngIf="isSubmitting">Saving...</span>
+    </button>
+  </div>
+</form>

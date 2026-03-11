@@ -1,0 +1,91 @@
+<div class="dashboard-container">
+  <header class="dashboard-header">
+    <h1>User Dashboard</h1>
+    <button class="add-user-btn" (click)="openAddUserModal()">
+      <span class="btn-icon">+</span>
+      Add User
+    </button>
+  </header>
+
+  <div class="dashboard-content">
+    <div class="chart-section">
+      <div class="chart-container">
+        <canvas #chartCanvas></canvas>
+      </div>
+    </div>
+
+    <div class="table-section">
+      <div class="table-controls">
+        <div class="search-container">
+          <input 
+            type="text" 
+            class="search-input" 
+            placeholder="Search by name, email, or role..." 
+            [value]="searchTerm"
+            (input)="onSearchChange($any($event).target.value)">
+          <span class="search-icon">🔍</span>
+        </div>
+        <div class="results-info">
+          Showing {{ paginatedUsers.length }} of {{ filteredUsers.length }} results
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table class="users-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of paginatedUsers">
+              <td>{{ user.name }}</td>
+              <td>{{ user.email }}</td>
+              <td>
+                <span class="role-badge" [ngClass]="'role-' + user.role.toLowerCase()">
+                  {{ user.role }}
+                </span>
+              </td>
+            </tr>
+            <tr *ngIf="filteredUsers.length === 0">
+              <td colspan="3" class="no-data">No users found</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="pagination-controls" *ngIf="filteredUsers.length > 0">
+        <button 
+          class="pagination-btn" 
+          (click)="prevPage()" 
+          [disabled]="currentPage === 1">
+          ← Previous
+        </button>
+        <span class="pagination-info">
+          Page {{ currentPage }} of {{ totalPages }}
+        </span>
+        <button 
+          class="pagination-btn" 
+          (click)="nextPage()" 
+          [disabled]="currentPage === totalPages">
+          Next →
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for User Form -->
+  <div class="modal-overlay" *ngIf="isModalOpen" (click)="closeModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Add New User</h2>
+        <button class="close-btn" (click)="closeModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </div>
+</div>
